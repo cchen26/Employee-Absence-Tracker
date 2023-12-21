@@ -14,15 +14,17 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
     List<UserInfo> findAllByOrderById();
 
-    Optional<UserInfo> findById(Long id);
+    Optional<UserInfo> findById(Integer id);
 
     @Transactional
     @Modifying
     @Query("UPDATE UserInfo u SET u.active = false WHERE u.id = :id")
-    void blockUser(Long id);
+    void blockUser(Integer id);
 
     @Transactional
     @Modifying
     @Query("UPDATE UserInfo u SET u.active = true WHERE u.id = :id")
-    void unBlockUser(Long id);
+    void unBlockUser(Integer id);
+
+    void deleteById(Integer id);
 }

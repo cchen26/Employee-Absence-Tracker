@@ -1,6 +1,7 @@
 package com.github.cchen26.employeeabsencetracker.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
@@ -16,17 +17,18 @@ public class LeaveDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private String username;
-
-    private String employeeName;
+    @NotNull(message = "Please specify the user!")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserInfo user; // Assuming UserInfo is your user entity
 
     @NotNull(message = "Please provide start date!")
-    private LocalDate fromDate;
+    private LocalDateTime fromDate;
 
     @NotNull(message = "Please provide end date!")
-    private LocalDate toDate;
+    private LocalDateTime toDate;
 
     @NotBlank(message = "Please select type of leave!")
     private String leaveType;

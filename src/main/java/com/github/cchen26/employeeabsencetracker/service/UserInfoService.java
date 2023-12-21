@@ -1,4 +1,5 @@
 package com.github.cchen26.employeeabsencetracker.service;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
@@ -41,19 +42,19 @@ public class UserInfoService {
         return userInfoRepository.findAllByOrderById();
     }
 
-    public Optional<UserInfo> getUserById(Long id) {
+    public Optional<UserInfo> getUserById(Integer id) {
         return userInfoRepository.findById(id);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         userInfoRepository.deleteById(id);
     }
 
-    public void blockUser(Long id) {
+    public void blockUser(Integer id) {
         userInfoRepository.blockUser(id);
     }
 
-    public void unBlockUser(Long id) {
+    public void unBlockUser(Integer id) {
         userInfoRepository.unBlockUser(id);
     }
 }

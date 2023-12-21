@@ -1,14 +1,13 @@
 package com.github.cchen26.employeeabsencetracker.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
 import com.github.cchen26.employeeabsencetracker.model.LeaveDetails;
 import com.github.cchen26.employeeabsencetracker.repository.LeaveManageRepository;
 
-
-@Service(value = "leaveManageService")
+@Service
 public class LeaveManageService {
 
     private final LeaveManageRepository leaveManageRepository;
@@ -28,7 +27,7 @@ public class LeaveManageService {
         return leaveManageRepository.findAll();
     }
 
-    public Optional<LeaveDetails> getLeaveDetailsOnId(Long id) {
+    public Optional<LeaveDetails> getLeaveDetailsById(Integer id) {
         return leaveManageRepository.findById(id);
     }
 
@@ -40,10 +39,13 @@ public class LeaveManageService {
         return leaveManageRepository.getAllActiveLeaves();
     }
 
-    public List<LeaveDetails> getAllLeavesOfUser(String username) {
-        return leaveManageRepository.getAllLeavesOfUser(username);
+    public List<LeaveDetails> getAllLeavesOfUser(Integer userId) {
+        return leaveManageRepository.getAllLeavesOfUser(userId);
     }
 
-    // Method for getAllLeavesOnStatus needs to be refactored or moved to the repository layer
-}
+    // Refactor or remove this method to use safer query building techniques
+    public List<LeaveDetails> getAllLeavesOnStatus(boolean pending, boolean accepted, boolean rejected) {
+        return leaveManageRepository.findLeavesByStatus(pending, accepted, rejected);
+    }
 
+}

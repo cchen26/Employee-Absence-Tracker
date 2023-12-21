@@ -1,26 +1,29 @@
 package com.github.cchen26.employeeabsencetracker.repository;
 
-import java.io.Serializable;
 import java.util.List;
 
+import com.github.cchen26.employeeabsencetracker.model.LeaveDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import com.github.cchen26.employeeabsencetracker.model.LeaveDetails;
+import org.springframework.data.repository.query.Param;
 
 @Repository(value = "leaveManageRepository")
-public interface LeaveManageRepository extends JpaRepository<LeaveDetails, Serializable> {
+public interface LeaveManageRepository extends JpaRepository<LeaveDetails, Integer> {
+
+    @Query("SELECT ld FROM LeaveDetails ld WHERE ld.active = true")
+    List<LeaveDetails> getAllActiveLeaves();
+
+    @Query("SELECT ld FROM LeaveDetails ld WHERE ld.user.id = :userId ORDER BY ld.id DESC")
+    List<LeaveDetails> getAllLeavesOfUser(@Param("userId") Integer userId);
 
 
-    @Query(nativeQuery = true, value = "select array_to_json(array_agg(row_to_json(t))) from (select employee_name||' on leave' as title,to_char(from_date,'YYYY-MM-DD') as start,to_char(to_date,'YYYY-MM-DD') as end from leave_details) as t;")
-    public Object getAllLeavesAsJsonArray();
-
-    @Query(nativeQuery = true, value = "select * from leave_details where active=true")
-    public List<LeaveDetails> getAllActiveLeaves();
-
-    @Query(nativeQuery = true, value = "select * from leave_details where username=? order by id desc")
-    public List<LeaveDetails> getAllLeavesOfUser(String username);
+    // Add a method for dynamic query based on status parameters
+    @Query("SELECT ld FROM LeaveDetails ld WHERE " +
+            "(?1 = true AND ld.active = true) OR " +
+            "(?2 = true AND ld.active = false AND ld.acceptRejectFlag = true) OR " +
+            "(?3 = true AND ld.active = false AND ld.acceptRejectFlag = false)")
+    List<LeaveDetails> findLeavesByStatus(boolean pending, boolean accepted, boolean rejected);
 
 
 }

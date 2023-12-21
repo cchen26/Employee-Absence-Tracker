@@ -6,8 +6,8 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.List;
 import com.github.cchen26.employeeabsencetracker.model.LeaveDetails;
+import java.util.List;
 
 @Repository
 public class LeaveManageNativeSqlRepo {
